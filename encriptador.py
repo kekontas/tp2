@@ -1,8 +1,14 @@
+<<<<<<< Updated upstream
 def encriptador(file: str, clave: str):
     """
     Pide al usuario una clave y un path para un archivo el cual desea que su contenido sea encripado.
+=======
+def encriptador (file , clave):
+    """ 
+    Pide al usuario una clave y un path para un archivo el cual desea que su contenido sea encriptado.
+>>>>>>> Stashed changes
     Guarda el texto encriptado en un nuevo archivo con un nombre elegido por el usuario.
-    Si no existe el archivo pide que ingresen un path hasta que exista el archivo con dicho path.
+    Si no existe el archivo que el ususario desea encriptar pide que ingresen un path hasta que exista el archivo con dicho path.
     La clave debe ser compuesta unicamente por letras de abecedario ingles minusculas.
     El archivo no devuelve nada. Solamente crea un archivo con el texto encriptado.
     """
