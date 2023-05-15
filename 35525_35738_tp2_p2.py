@@ -20,6 +20,7 @@ def file_check(file2encript: str)-> str:
             file2encript = input('Ingrese el path de un archivo: ')
     return file2encript  
 
+
 def file2list(file2encrypt: str)->list:
     """
     Lee el archivo y devuelve su contenido como una lista de cadenas.
@@ -30,9 +31,15 @@ def file2list(file2encrypt: str)->list:
         lineas = [i.rstrip() for i in archivo if i != "\n"]  # listas de compresion para pasar el contenido a una lista. Lineas vacias seran eliminadas.
     return lineas
 
+
 def decrypter(lineas: list, clave: str)-> list:
     """
-    Escribir docstring
+    Desencripta el texto usando el cifrado de Vigenere.
+    Argumentos:
+        lineas(list)-> Contenido del archivo en lista de lineas.
+        clave(str)-> contrasena que va a ser usada para desencriptar.
+    Return:
+        desencripted_line(list)-> Contenido del archivo ya desencriptado en una lista.
     """
     desencripted_line = []
     letras_especiales = 0
@@ -42,22 +49,27 @@ def decrypter(lineas: list, clave: str)-> list:
         c = ord(letra_index) - 97
 
         if c >= 0 and c <= 25:
-            c = (c - ord(clave[(i - letras_especiales) % len(clave)]) - 97) % 26
+            c = (c - ord(clave[(i - letras_especiales)% len(clave)]) + 97) % 26  # uso la formuladada para desencriptar el texto.
             if c < 0:
                 c += 26
-                desencripted_line += chr(c + 97)
+                desencripted_line.append(chr(c + 97)) 
             else:
-                desencripted_line += chr(c + 97)
+                desencripted_line.append(chr(c + 97))
         else: 
-            desencripted_line += chr(c + 97)
+            desencripted_line.append(chr(c + 97))
             letras_especiales += 1
-    desencripted_line = ''.join(desencripted_line)
-    return desencripted_line
+    return ''.join(desencripted_line)
 
 
 def new_file(lineas: list, path: str, clave: str):
     """
-    escribo docstring
+    Crea un archivo y le escribe el archivo viejo ya encriptado.
+    Argumentos:
+        lineas(list)-> contenido del archivo ya desencriptado en una lista
+        path(str)-> nombre del archivo que va a ser creado.
+        clave(str)-> contraseña que va a ser usada para desencriptar.
+    Returns:
+        None-> no devuelve nada; solamente crea el archivo con el texto encriptado.
     """
     if '.txt' not in path:
         path += '.txt'
@@ -68,11 +80,11 @@ def new_file(lineas: list, path: str, clave: str):
 
 def password_check(clave:str)->str:
     """
-    Revisa que la contrasena este solamente compuesta por letras del abecedario ingles.
+    Revisa que la contraseña este solamente compuesta por letras del abecedario ingles.
     Argumentos:
-        clave(str)-> contrasena que va a ser usada para encriptar.
+        clave(str)-> contraseña que va a ser usada para encriptar.
     Returns:
-        valid_pass(bool)-> True si la contrasena es valida y False si no lo es.
+        valid_pass(bool)-> True si la contraseña es valida y False si no lo es.
     """
     clave = clave.lower()
     valid_pass = True
@@ -81,7 +93,13 @@ def password_check(clave:str)->str:
             valid_pass = False
     return valid_pass
 
+
 def main():
+    """
+    Funcion principal del programa.
+    No recibe argumentos.
+    No devuelve ningun valor.
+    """
     print('≡≡Desencriptador de Cifrado de Vigenère≡≡')
     file = file_check(input('Ingrese el path del archivo encriptado: '))
     clave = input('Ingrese la clave: ')
@@ -90,4 +108,7 @@ def main():
     path = input('Ingrese el nombre del archivo para la desencripcion: ')
     lines = file2list(file)
     new_file(lines, path, clave)
-main()
+
+
+if __name__ == '__main__':
+    main()

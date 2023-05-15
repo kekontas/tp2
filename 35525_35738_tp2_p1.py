@@ -1,8 +1,10 @@
 def file_check(file2encript: str)-> str:
     """
     Verifica la existencia del archivo y si el mismo puede ser accedido.
-    Argumentos: file2encrypt(str)-> es el path del archivo que va a ser encriptado.
-    Returns: file2encrypt (str)-> es el path del archivo verificado
+    Argumentos: 
+        file2encrypt(str)-> es el path del archivo que va a ser encriptado.
+    Returns: 
+        file2encrypt (str)-> el path del archivo verificado
     """
     # Verifica la accesibilidad y existencia del archivo.
     while True:
@@ -24,21 +26,25 @@ def file_check(file2encript: str)-> str:
 def file2list(file2encrypt: str)->list:
     """
     Lee el archivo y devuelve su contenido como una lista de cadenas.
-    Argumentos: file2encrypt(str)-> path del archivo a encriptar.
-    Returns: lineas(list)-> contenido del archivo en listas.
+    Argumentos: 
+        file2encrypt(str)-> path del archivo a encriptar.
+    Returns: 
+        lineas(list)-> contenido del archivo en listas.
     """
     with open(file2encrypt, 'rt') as archivo:
-        lineas = [i.rstrip() for i in archivo if i != "\n"]  # listas de compresion para pasar el contenido a una lista. Lineas vacias seran eliminadas.
+        lineas = [i.rstrip() for i in archivo if i != "\n"]  # listas de compresion para pasar el contenido a una lista de str. Lineas vacias seran eliminadas. Y elimina el \n.
     return lineas
 
 
 def saca_tildes(lineas:list)->list:
     """
     Lee el contenido del archivo y reemplaza cualquier vocal con tilde por la vocal sin tilde.
-    Argumentos: lineas(list)->contenido del archivo en lista
-    Returns: lineas_sin_tildes(list)-> contenido del archivo en lista sin tildes.
+    Argumentos: 
+        lineas(list)->contenido del archivo en lista
+    Returns: 
+        lineas_sin_tildes(list)-> contenido del archivo en lista sin tildes.
     """
-    print('El programa no encripta tildes. Si el archivo contiene alguna va a ser cambiada a su respectiva vocal.')
+    print('Aviso: El programa no encripta tildes. Si el archivo contiene alguna va a ser cambiada a su respectiva vocal.')
     tildes = {'a': 'áâàãäå', 
               'e': 'éêèë',
               'i': 'íîìï',
@@ -50,7 +56,7 @@ def saca_tildes(lineas:list)->list:
         for letra in linea:
             for vocal, vocal_tildes in tildes.items():
                 if letra in vocal_tildes:
-                    letra = vocal
+                    letra = vocal   # intercambio vocal con tilde por su vocal correspondiente.
                     break
             linea_sin_tildes.append (letra)
         linea_sin_tildes = ''.join(linea_sin_tildes)
@@ -74,10 +80,8 @@ def encrypter(lineas: list, clave: str)-> list:
         letra_index = c.lower()
         c = ord(letra_index) - 97
         if c >= 0 and c <= 25:
-                c = (c + ord(clave[(i - letras_especiales) % len(clave)]) - 97) % 26
-                if c > 25:
-                    c -= 26
-                encripted_line += chr(c + 97)
+            c = (c + ord(clave[(i - letras_especiales) % len(clave)]) - 97) % 26  # uso la formula dada para calcular el valor encriptador.
+            encripted_line += chr(c + 97)
         else: 
             encripted_line += chr(c + 97)
             letras_especiales += 1
@@ -97,18 +101,18 @@ def new_file(lineas: list, path: str, clave: str):
     """
     if '.txt' not in path:
         path += '.txt'
-    with open(path, 'wt') as encripted_file:        
-        encripted_lines = encrypter(lineas, clave)
+    with open(path, 'wt') as encripted_file:   # crea el archivo como 'wt' asi lo crea de cualquier manera, y si el archivo ya existe , lo escribe por arriba.     
+        encripted_lines = encrypter(lineas, clave) 
         encripted_file.write(encripted_lines)
 
 
 def password_check(clave:str)->str:
     """
-    Revisa que la contrasena este solamente compuesta por letras del abecedario ingles.
+    Revisa que la contraseña este solamente compuesta por letras del abecedario ingles.
     Argumentos:
-        clave(str)-> contrasena que va a ser usada para encriptar.
+        clave(str)-> contraseña que va a ser usada para encriptar.
     Returns:
-        valid_pass(bool)-> True si la contrasena es valida y False si no lo es.
+        valid_pass(bool)-> True si la contraseña es valida y False si no lo es.
     """
     clave = clave.lower()
     valid_pass = True
@@ -121,34 +125,20 @@ def password_check(clave:str)->str:
 def main():
     """
     Funcion principal que ejecuta el programa.
-    Argumentos:
-        file(str)-> path del archivo que va a ser encriptado. 
-        clave(str)-> contrasena que va a ser usada para encriptar.
-        path(str)-> nombre del archivo donde se va a guardar el texto encritpado.
+    No recibe argumentos.
+    No devuelve ningun valor.
     """
-   
     print('≡≡Encriptador de Cifrado de Vigenère≡≡')
     file = file_check(input('Ingrese el path del archivo en texto plano: '))
     clave = input('Ingrese la clave: ')
-    while password_check(clave) is False:
+    while password_check(clave) is False: # si la contraña es invalida; la pido devuelta hasta que sea valida. 
         clave = input('La clave solo puede ser compuesta por letras del abecedario ingles\nIngrese otra clave: ')
     
     path = input('Ingrese el nombre del archivo para la encripcion: ')
     lines = file2list(file)
     sin_tildes = saca_tildes(lines)
     new_file(sin_tildes, path, clave)
-    else:
-        print('≡≡Desencriptador de Cifrado de Vigenère≡≡')
-        file = file_check(input('Ingrese el path del archivo encriptado: '))
-        clave = input('Ingrese la clave: ')
-        while password_check(clave) is False:
-            clave = input('La clave solo puede ser compuesta por letras del abecedario ingles\nIngrese otra clave: ')
-        path = input('Ingrese el nombre del archivo para la desencripcion: ')
-        lines = file2list(file)
-        new_file(lines, path, clave, enc_des)
 
 
-
-
-if __name__== '__main__':
-    main(True)
+if __name__== '__main__':  # comienzo el programa
+    main()
